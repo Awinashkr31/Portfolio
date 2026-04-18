@@ -10,6 +10,7 @@ import Education from './components/Education'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
 import { Analytics } from "@vercel/analytics/react"
+import { SpeedInsights } from "@vercel/speed-insights/react"
 
 function App() {
   const [darkMode, setDarkMode] = useState(() => {
@@ -54,6 +55,7 @@ function App() {
       </div>
       <Footer />
       <Analytics />
+      <SpeedInsights />
     </>
   )
 }
