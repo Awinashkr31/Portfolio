@@ -9,6 +9,7 @@ import Experience from './components/Experience'
 import Education from './components/Education'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
+import { Analytics } from "@vercel/analytics/react"
 
 function App() {
   const [darkMode, setDarkMode] = useState(() => {
@@ -52,6 +53,7 @@ function App() {
         </div>
       </div>
       <Footer />
+      <Analytics />
     </>
   )
 }
