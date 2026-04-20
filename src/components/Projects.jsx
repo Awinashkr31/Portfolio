@@ -7,24 +7,32 @@ const PROJECTS = [
     title: 'Flipkart Review Scraper',
     desc: 'Developed a Flask-based web application that allows users to search for products and scrape customer reviews directly from Flipkart.',
     stack: ['Flask', 'Python', 'Web Scraping', 'MongoDB'],
+    liveLink: '#',
+    githubLink: 'https://github.com/Awinashkr31/flipkart-review-scraper',
   },
   {
     img: '/diamond_prediction.png',
     title: 'Diamond Price Prediction',
     desc: 'Machine learning web application to predict diamond prices based on features like carat, cut, color, and clarity. Deployed on Microsoft Azure.',
     stack: ['Machine Learning', 'Flask', 'Scikit-learn', 'Azure'],
+    liveLink: 'https://diamond-price-prediction2.onrender.com/',
+    githubLink: 'https://github.com/Awinashkr31/diamond-price-prediction',
   },
   {
     img: '/embroidery_ecommerce.png',
     title: 'Embroidery Ecommerce',
     desc: 'Premium, editorial-grade e-commerce platform for an embroidery shop with Mehndi Booking, Custom Design pages and high-end UI patterns.',
     stack: ['React', 'Node.js', 'Vite', 'CSS'],
+    liveLink: 'https://www.embroiderybysana.live/',
+    githubLink: 'https://github.com/Awinashkr31/embroidery-ecommerce',
   },
   {
     img: '/causal_inference.png',
     title: 'Causal Inference Project',
     desc: 'A robust causal inference pipeline and backend service designed for analyzing complex data relationships and generating insights.',
     stack: ['Python', 'Data Science', 'Machine Learning'],
+    liveLink: '#',
+    githubLink: 'https://github.com/Awinashkr31/causal-inference',
   },
 ]
 
@@ -50,7 +58,7 @@ export default function Projects() {
         <p className="section-subtitle">A selection of projects I've worked on recently.</p>
       </div>
       <div className="projects-grid" ref={gridRef}>
-        {PROJECTS.map(({ img, title, desc, stack }) => (
+        {PROJECTS.map(({ img, title, desc, stack, liveLink, githubLink }) => (
           <div className="project-card fade-up" key={title}>
             <div className="project-image-wrap">
               <img src={img} alt={title} className="project-image" />
@@ -62,14 +70,14 @@ export default function Projects() {
                 {stack.map(s => <span className="stack-tag" key={s}>{s}</span>)}
               </div>
               <div className="project-links">
-                <button className="link-btn">
+                <a href={liveLink} target="_blank" rel="noopener noreferrer" className="link-btn">
                   <iconify-icon icon="lucide:external-link" style={{ fontSize: '14px' }} />
                   Live Demo
-                </button>
-                <button className="link-btn">
+                </a>
+                <a href={githubLink} target="_blank" rel="noopener noreferrer" className="link-btn">
                   <iconify-icon icon="lucide:github" style={{ fontSize: '14px' }} />
                   Code
-                </button>
+                </a>
               </div>
             </div>
           </div>

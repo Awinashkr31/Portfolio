@@ -11,13 +11,32 @@ export default function Contact() {
 
   const handleChange = e => setForm(f => ({ ...f, [e.target.name]: e.target.value }))
 
-  const handleSubmit = e => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    setSent(true)
-    setTimeout(() => {
-      setSent(false)
-      setForm({ name: '', email: '', message: '' })
-    }, 3000)
+    try {
+      await fetch("https://formsubmit.co/ajax/awinashkr31@gmail.com", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          message: form.message,
+          _subject: "New contact from your Portfolio!"
+        })
+      });
+
+      setSent(true)
+      setTimeout(() => {
+        setSent(false)
+        setForm({ name: '', email: '', message: '' })
+      }, 3000)
+    } catch (error) {
+      console.error("Failed to send email:", error)
+      alert("Something went wrong! Please email me directly.")
+    }
   }
 
   return (
@@ -29,17 +48,21 @@ export default function Contact() {
       <div className="contact-container">
         <div className="contact-info fade-up" ref={infoRef}>
           {[
-            { icon: 'lucide:phone', label: 'Phone', value: '+91 9534962190' },
-            { icon: 'lucide:mail', label: 'Email', value: 'awinashkr31@gmail.com' },
-            { icon: 'lucide:linkedin', label: 'LinkedIn', value: 'linkedin.com/in/awinash-kumar-886540242' },
-          ].map(({ icon, label, value }) => (
+            { icon: 'lucide:phone', label: 'Phone', value: '+91 9534962190', href: 'tel:+919534962190' },
+            { icon: 'lucide:linkedin', label: 'LinkedIn', value: 'linkedin.com/in/awinash-kumar-cu/', href: 'https://www.linkedin.com/in/awinash-kumar-cu/' },
+            { icon: 'lucide:github', label: 'GitHub', value: 'github.com/Awinashkr31', href: 'https://github.com/Awinashkr31' },
+          ].map(({ icon, label, value, href }) => (
             <div className="info-item" key={label}>
               <div className="info-icon">
                 <iconify-icon icon={icon} style={{ fontSize: '22px', color: 'var(--primary)' }} />
               </div>
               <div className="info-content">
                 <h4>{label}</h4>
-                <p>{value}</p>
+                <p>
+                  <a href={href} target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'none' }}>
+                    {value}
+                  </a>
+                </p>
               </div>
             </div>
           ))}

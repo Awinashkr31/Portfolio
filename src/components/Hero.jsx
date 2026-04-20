@@ -32,7 +32,7 @@ export default function Hero() {
             View Projects
             <iconify-icon icon="lucide:arrow-right" style={{ fontSize: '18px' }} />
           </a>
-          <a href="#" className="btn btn-outline">
+          <a href="/Awinash%20resume.pdf" download className="btn btn-outline">
             Download CV
             <iconify-icon icon="lucide:download" style={{ fontSize: '18px' }} />
           </a>
@@ -42,7 +42,7 @@ export default function Hero() {
       <div className="hero-image-container fade-up" ref={imageRef}>
         <div className="hero-image-wrapper">
           <img
-            src="https://storage.googleapis.com/banani-avatars/avatar%2Fmale%2F25-35%2FSouth%20Asian%2F3"
+            src="/public/img.jpg"
             alt="Awinash Kumar - Full Stack Developer"
             className="hero-image"
           />

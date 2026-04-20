@@ -34,7 +34,7 @@ export default function Navbar({ darkMode, toggleTheme }) {
       <div className="container nav-inner">
         <div className="logo">
           <iconify-icon icon="lucide:code-2" style={{ fontSize: '22px', color: 'var(--primary)' }} />
-          <span>DevPortfolio</span>
+          <span> Awinash </span>
         </div>
 
         <div className="nav-links">

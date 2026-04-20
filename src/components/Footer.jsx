@@ -6,18 +6,15 @@ export default function Footer() {
           <div>
             <div className="logo" style={{ marginBottom: '8px' }}>
               <iconify-icon icon="lucide:code-2" style={{ fontSize: '22px', color: 'var(--primary)' }} />
-              <span>DevPortfolio</span>
+              <span> Awinash </span>
+              <p className="footer-tagline"></p>
             </div>
-            <p className="footer-tagline">Building digital experiences with code &amp; AI.</p>
           </div>
           <div className="social-links">
-            <a href="#" className="social-btn" aria-label="Twitter">
-              <iconify-icon icon="lucide:twitter" style={{ fontSize: '18px' }} />
-            </a>
-            <a href="#" className="social-btn" aria-label="GitHub">
+            <a href="https://github.com/Awinashkr31" className="social-btn" aria-label="GitHub">
               <iconify-icon icon="lucide:github" style={{ fontSize: '18px' }} />
             </a>
-            <a href="#" className="social-btn" aria-label="LinkedIn">
+            <a href="https://www.linkedin.com/in/awinash-kumar-cu/" className="social-btn" aria-label="LinkedIn">
               <iconify-icon icon="lucide:linkedin" style={{ fontSize: '18px' }} />
             </a>
           </div>
