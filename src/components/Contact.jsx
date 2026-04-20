@@ -7,35 +7,40 @@ export default function Contact() {
   const { ref: formRef } = useFadeUp()
 
   const [form, setForm] = useState({ name: '', email: '', message: '' })
-  const [sent, setSent] = useState(false)
+  const [status, setStatus] = useState('idle') // idle | sending | success | error
 
   const handleChange = e => setForm(f => ({ ...f, [e.target.name]: e.target.value }))
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    setStatus('sending')
+
     try {
-      await fetch("https://formsubmit.co/ajax/awinashkr31@gmail.com", {
-        method: "POST",
+      const res = await fetch('https://formsubmit.co/ajax/awinashkr31@gmail.com', {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/json'
+          'Accept': 'application/json',
         },
         body: JSON.stringify({
           name: form.name,
           email: form.email,
           message: form.message,
-          _subject: "New contact from your Portfolio!"
-        })
-      });
+          _captcha: false,
+        }),
+      })
 
-      setSent(true)
-      setTimeout(() => {
-        setSent(false)
+      if (res.ok) {
+        setStatus('success')
         setForm({ name: '', email: '', message: '' })
-      }, 3000)
-    } catch (error) {
-      console.error("Failed to send email:", error)
-      alert("Something went wrong! Please email me directly.")
+        setTimeout(() => setStatus('idle'), 5000)
+      } else {
+        setStatus('error')
+        setTimeout(() => setStatus('idle'), 5000)
+      }
+    } catch {
+      setStatus('error')
+      setTimeout(() => setStatus('idle'), 5000)
     }
   }
 
@@ -68,7 +73,11 @@ export default function Contact() {
           ))}
         </div>
 
-        <form className="contact-form fade-up" ref={formRef} onSubmit={handleSubmit}>
+        <form
+          className="contact-form fade-up"
+          ref={formRef}
+          onSubmit={handleSubmit}
+        >
           <div className="form-group">
             <label className="form-label" htmlFor="name">Name</label>
             <input
@@ -91,25 +100,29 @@ export default function Contact() {
               value={form.message} onChange={handleChange}
             />
           </div>
+
+          {status === 'success' && (
+            <div className="form-status form-success">
+              <iconify-icon icon="lucide:check-circle" style={{ fontSize: '18px' }} />
+              Message sent successfully! I'll get back to you soon.
+            </div>
+          )}
+
+          {status === 'error' && (
+            <div className="form-status form-error">
+              <iconify-icon icon="lucide:alert-circle" style={{ fontSize: '18px' }} />
+              Something went wrong. Please email me at awinashkr31@gmail.com
+            </div>
+          )}
+
           <button
             type="submit"
             className="btn btn-primary"
-            style={{
-              width: '100%', height: '50px', fontSize: '15px',
-              backgroundColor: sent ? '#10b981' : undefined,
-            }}
+            style={{ width: '100%', height: '50px', fontSize: '15px' }}
+            disabled={status === 'sending'}
           >
-            {sent ? (
-              <>
-                <iconify-icon icon="lucide:check" style={{ fontSize: '16px' }} />
-                Message Sent!
-              </>
-            ) : (
-              <>
-                Send Message
-                <iconify-icon icon="lucide:send" style={{ fontSize: '16px' }} />
-              </>
-            )}
+            {status === 'sending' ? 'Sending...' : 'Send Message'}
+            <iconify-icon icon={status === 'sending' ? 'lucide:loader-2' : 'lucide:send'} style={{ fontSize: '16px' }} />
           </button>
         </form>
       </div>

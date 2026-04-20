@@ -13,8 +13,8 @@ const PROJECTS = [
   {
     img: '/diamond_prediction.png',
     title: 'Diamond Price Prediction',
-    desc: 'Machine learning web application to predict diamond prices based on features like carat, cut, color, and clarity. Deployed on Microsoft Azure.',
-    stack: ['Machine Learning', 'Flask', 'Scikit-learn', 'Azure'],
+    desc: 'Machine learning web application to predict diamond prices based on features like carat, cut, color, and clarity. Deployed on Render.',
+    stack: ['Machine Learning', 'Flask', 'Scikit-learn', 'Render'],
     liveLink: 'https://diamond-price-prediction2.onrender.com/',
     githubLink: 'https://github.com/Awinashkr31/diamond-price-prediction',
   },

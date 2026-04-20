@@ -42,7 +42,7 @@ export default function Hero() {
       <div className="hero-image-container fade-up" ref={imageRef}>
         <div className="hero-image-wrapper">
           <img
-            src="/public/img.jpg"
+            src="/img.jpg"
             alt="Awinash Kumar - Full Stack Developer"
             className="hero-image"
           />
