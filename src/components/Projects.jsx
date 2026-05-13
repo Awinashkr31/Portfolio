@@ -3,22 +3,6 @@ import { useFadeUp } from '../hooks/useFadeUp'
 
 const PROJECTS = [
   {
-    img: '/flipkart_scraper.png',
-    title: 'Flipkart Review Scraper',
-    desc: 'Developed a Flask-based web application that allows users to search for products and scrape customer reviews directly from Flipkart.',
-    stack: ['Flask', 'Python', 'Web Scraping', 'MongoDB'],
-    liveLink: '#',
-    githubLink: 'https://github.com/Awinashkr31/flipkart-review-scraper',
-  },
-  {
-    img: '/diamond_prediction.png',
-    title: 'Diamond Price Prediction',
-    desc: 'Machine learning web application to predict diamond prices based on features like carat, cut, color, and clarity. Deployed on Render.',
-    stack: ['Machine Learning', 'Flask', 'Scikit-learn', 'Render'],
-    liveLink: 'https://diamond-price-prediction2.onrender.com/',
-    githubLink: 'https://github.com/Awinashkr31/diamond-price-prediction',
-  },
-  {
     img: '/embroidery_ecommerce.png',
     title: 'Embroidery Ecommerce',
     desc: 'Premium, editorial-grade e-commerce platform for an embroidery shop with Mehndi Booking, Custom Design pages and high-end UI patterns.',
@@ -27,12 +11,44 @@ const PROJECTS = [
     githubLink: 'https://github.com/Awinashkr31/embroidery-ecommerce',
   },
   {
+    img: '/ai_lead_gen.png',
+    title: 'AI Lead Generation',
+    desc: 'Automated lead discovery and outreach system for digital agencies using AI agents and intelligent targeting.',
+    stack: ['Python', 'OpenAI', 'Automation', 'LangChain'],
+    liveLink: '#',
+    githubLink: 'https://github.com/Awinashkr31/AI-Powered-Lead-Generation-for-Digital-Agencies',
+  },
+  {
     img: '/causal_inference.png',
     title: 'Causal Inference Project',
     desc: 'A robust causal inference pipeline and backend service designed for analyzing complex data relationships and generating insights.',
     stack: ['Python', 'Data Science', 'Machine Learning'],
     liveLink: '#',
     githubLink: 'https://github.com/Awinashkr31/causal-inference',
+  },
+  {
+    img: '/meta_automation.png',
+    title: 'Meta DM Automation',
+    desc: 'Intelligent automation for Meta (Facebook/Instagram) direct messaging to scale customer engagement and lead nurturing.',
+    stack: ['Node.js', 'Meta API', 'Puppeteer', 'Automation'],
+    liveLink: '#',
+    githubLink: 'https://github.com/Awinashkr31/meta-dm-automation',
+  },
+  {
+    img: '/pathfinding_visualizer.png',
+    title: 'Pathfinding Visualizer',
+    desc: 'An interactive web application to visualize various pathfinding algorithms like Dijkstra and A* in real-time.',
+    stack: ['React', 'Algorithms', 'CSS3', 'Vite'],
+    liveLink: '#',
+    githubLink: 'https://github.com/Awinashkr31/Pathfinding-Visualizer',
+  },
+  {
+    img: '/flipkart_scraper.png',
+    title: 'Flipkart Review Scraper',
+    desc: 'Developed a Flask-based web application that allows users to search for products and scrape customer reviews directly from Flipkart.',
+    stack: ['Flask', 'Python', 'Web Scraping', 'MongoDB'],
+    liveLink: '#',
+    githubLink: 'https://github.com/Awinashkr31/flipkart-review-scraper',
   },
 ]
 

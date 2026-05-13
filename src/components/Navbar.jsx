@@ -48,6 +48,10 @@ export default function Navbar({ darkMode, toggleTheme }) {
               {id.charAt(0).toUpperCase() + id.slice(1)}
             </a>
           ))}
+          <a href="/resume.pdf" download className="btn btn-primary" style={{ padding: '6px 12px', fontSize: '14px', height: 'auto', boxShadow: 'none' }}>
+            Resume
+            <iconify-icon icon="lucide:download" style={{ fontSize: '14px' }} />
+          </a>
           <button className="theme-toggle" onClick={toggleTheme} aria-label="Toggle dark mode">
             <iconify-icon icon={icon} style={{ fontSize: '18px' }} />
           </button>
@@ -77,6 +81,10 @@ export default function Navbar({ darkMode, toggleTheme }) {
             {id.charAt(0).toUpperCase() + id.slice(1)}
           </a>
         ))}
+        <a href="/resume.pdf" download className="btn btn-primary" style={{ margin: '10px 20px' }} onClick={closeMobile}>
+          Download Resume
+          <iconify-icon icon="lucide:download" style={{ fontSize: '18px' }} />
+        </a>
       </div>
     </nav>
   )

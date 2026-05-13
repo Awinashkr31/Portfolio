@@ -32,8 +32,8 @@ export default function Hero() {
             View Projects
             <iconify-icon icon="lucide:arrow-right" style={{ fontSize: '18px' }} />
           </a>
-          <a href="/Awinash%20resume.pdf" download className="btn btn-outline">
-            Download CV
+          <a href="/resume.pdf" download className="btn btn-outline">
+            Download Resume
             <iconify-icon icon="lucide:download" style={{ fontSize: '18px' }} />
           </a>
         </div>
