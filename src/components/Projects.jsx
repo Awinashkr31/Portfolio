@@ -1,60 +1,97 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useFadeUp } from '../hooks/useFadeUp'
 
 const PROJECTS = [
   {
     img: '/embroidery_ecommerce.png',
     title: 'Embroidery Ecommerce',
-    desc: 'Premium, editorial-grade e-commerce platform for an embroidery shop with Mehndi Booking, Custom Design pages and high-end UI patterns.',
-    stack: ['React', 'Node.js', 'Vite', 'CSS'],
+    desc: 'Online marketplace for handmade embroidery products. Features premium e-commerce design, Mehndi Booking, and Custom Design pages.',
+    stack: ['JavaScript', 'React', 'Node.js', 'Vite'],
     liveLink: 'https://www.embroiderybysana.live/',
     githubLink: 'https://github.com/Awinashkr31/embroidery-ecommerce',
+    category: 'Web Dev',
+  },
+  {
+    img: '/meta_automation.png',
+    title: 'Meta DM Automation',
+    desc: 'Multi-tenant Instagram automation platform with DM workflows, comment triggers, CRM, analytics, and AI-powered conversation flows using the Meta API.',
+    stack: ['JavaScript', 'Node.js', 'Meta API', 'Automation'],
+    liveLink: '#',
+    githubLink: 'https://github.com/Awinashkr31/meta-dm-automation',
+    category: 'Automation',
+  },
+  {
+    img: '/diamond_prediction.png',
+    title: 'Customer Segmentation Model',
+    desc: 'Built a customer segmentation model using RFM analysis and K-Means clustering on 1M+ retail transactions in SQL and Python, identifying high-value customer segments representing 65% of revenue.',
+    stack: ['Python', 'SQL', 'K-Means', 'Data Analysis'],
+    liveLink: '#',
+    githubLink: 'https://github.com/Awinashkr31/Retail-Sales-Customer-Segmentation-Analysis-RFM-Model-',
+    category: 'AI & Data',
   },
   {
     img: '/ai_lead_gen.png',
     title: 'AI Lead Generation',
     desc: 'Automated lead discovery and outreach system for digital agencies using AI agents and intelligent targeting.',
-    stack: ['Python', 'OpenAI', 'Automation', 'LangChain'],
+    stack: ['TypeScript', 'OpenAI', 'Automation', 'LangChain'],
     liveLink: '#',
     githubLink: 'https://github.com/Awinashkr31/AI-Powered-Lead-Generation-for-Digital-Agencies',
+    category: 'Automation',
   },
   {
     img: '/causal_inference.png',
-    title: 'Causal Inference Project',
+    title: 'CausalLens',
     desc: 'A robust causal inference pipeline and backend service designed for analyzing complex data relationships and generating insights.',
-    stack: ['Python', 'Data Science', 'Machine Learning'],
+    stack: ['JavaScript', 'Data Science', 'Machine Learning'],
     liveLink: '#',
-    githubLink: 'https://github.com/Awinashkr31/causal-inference',
+    githubLink: 'https://github.com/Awinashkr31/CausalLens',
+    category: 'AI & Data',
   },
   {
-    img: '/meta_automation.png',
-    title: 'Meta DM Automation',
-    desc: 'Intelligent automation for Meta (Facebook/Instagram) direct messaging to scale customer engagement and lead nurturing.',
-    stack: ['Node.js', 'Meta API', 'Puppeteer', 'Automation'],
+    img: '/portfolio_website.png',
+    title: 'Marketing A/B Test Analysis',
+    desc: 'Comprehensive analysis of marketing campaign performance and A/B testing results to optimize conversion rates.',
+    stack: ['Python', 'A/B Testing', 'Data Analysis'],
     liveLink: '#',
-    githubLink: 'https://github.com/Awinashkr31/meta-dm-automation',
+    githubLink: 'https://github.com/Awinashkr31/Marketing-Campaign-Performance-AB-Test-Analysis',
+    category: 'AI & Data',
   },
   {
-    img: '/pathfinding_visualizer.png',
-    title: 'Pathfinding Visualizer',
-    desc: 'An interactive web application to visualize various pathfinding algorithms like Dijkstra and A* in real-time.',
-    stack: ['React', 'Algorithms', 'CSS3', 'Vite'],
+    img: '/diamond_prediction.png',
+    title: 'HR Analytics Dashboard',
+    desc: 'Employee Attrition Prediction and HR Dashboard for comprehensive workforce analytics and retention strategies.',
+    stack: ['Python', 'Data Analytics', 'Dashboard'],
     liveLink: '#',
-    githubLink: 'https://github.com/Awinashkr31/Pathfinding-Visualizer',
+    githubLink: 'https://github.com/Awinashkr31/Employee-Attrition-Prediction-HR-Dashboard',
+    category: 'AI & Data',
   },
   {
-    img: '/flipkart_scraper.png',
-    title: 'Flipkart Review Scraper',
-    desc: 'Developed a Flask-based web application that allows users to search for products and scrape customer reviews directly from Flipkart.',
-    stack: ['Flask', 'Python', 'Web Scraping', 'MongoDB'],
+    img: '/embroidery_ecommerce.png',
+    title: 'Embroidery ML API',
+    desc: 'Machine Learning API backend for the embroidery marketplace to power smart features and personalized recommendations.',
+    stack: ['Python', 'Machine Learning', 'API'],
     liveLink: '#',
-    githubLink: 'https://github.com/Awinashkr31/flipkart-review-scraper',
+    githubLink: 'https://github.com/Awinashkr31/embroidery-ml-api',
+    category: 'AI & Data',
+  },
+  {
+    img: '/ai_lead_gen.png',
+    title: 'AI Chatbot',
+    desc: 'Intelligent conversational agent and chatbot implementation capable of handling complex user inquiries.',
+    stack: ['Python', 'NLP', 'Chatbot'],
+    liveLink: '#',
+    githubLink: 'https://github.com/Awinashkr31/Chat_bot',
+    category: 'AI & Data',
   },
 ]
 
 export default function Projects() {
   const { ref: headRef } = useFadeUp()
   const gridRef = useRef(null)
+  const [activeFilter, setActiveFilter] = useState('All')
+
+  const FILTERS = ['All', 'Web Dev', 'AI & Data', 'Automation']
+  const filteredProjects = activeFilter === 'All' ? PROJECTS : PROJECTS.filter(p => p.category === activeFilter)
 
   useEffect(() => {
     if (!gridRef.current) return
@@ -72,9 +109,21 @@ export default function Projects() {
       <div className="fade-up" ref={headRef}>
         <h2 className="section-title">Featured Projects</h2>
         <p className="section-subtitle">A selection of projects I've worked on recently.</p>
+        
+        <div className="project-filters">
+          {FILTERS.map(filter => (
+            <button
+              key={filter}
+              className={`filter-btn ${activeFilter === filter ? 'active' : ''}`}
+              onClick={() => setActiveFilter(filter)}
+            >
+              {filter}
+            </button>
+          ))}
+        </div>
       </div>
       <div className="projects-grid" ref={gridRef}>
-        {PROJECTS.map(({ img, title, desc, stack, liveLink, githubLink }) => (
+        {filteredProjects.map(({ img, title, desc, stack, liveLink, githubLink }) => (
           <div className="project-card fade-up" key={title}>
             <div className="project-image-wrap">
               <img src={img} alt={title} className="project-image" />

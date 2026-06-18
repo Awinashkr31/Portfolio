@@ -1,8 +1,33 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 export default function Hero() {
   const contentRef = useRef(null)
   const imageRef = useRef(null)
+
+  const [roleIndex, setRoleIndex] = useState(0)
+  const [text, setText] = useState('')
+  const [isDeleting, setIsDeleting] = useState(false)
+  
+  const roles = ["Full Stack Developer", "AI Engineer", "Data Scientist"]
+
+  useEffect(() => {
+    let timeout;
+    const currentRole = roles[roleIndex]
+    const typeSpeed = isDeleting ? 50 : 100
+    
+    if (!isDeleting && text === currentRole) {
+      timeout = setTimeout(() => setIsDeleting(true), 2000)
+    } else if (isDeleting && text === '') {
+      setIsDeleting(false)
+      setRoleIndex((prev) => (prev + 1) % roles.length)
+    } else {
+      timeout = setTimeout(() => {
+        setText(currentRole.substring(0, text.length + (isDeleting ? -1 : 1)))
+      }, typeSpeed)
+    }
+    
+    return () => clearTimeout(timeout)
+  }, [text, isDeleting, roleIndex])
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -21,7 +46,8 @@ export default function Hero() {
           <span>👋</span> Hello, I'm Awinash Kumar
         </div>
         <h1 className="hero-title">
-          Building digital<br />experiences with<br />code &amp; AI.
+          I build digital<br />experiences as a<br />
+          <span className="typewriter-text">{text}</span><span className="cursor">&nbsp;</span>
         </h1>
         <p className="hero-tagline">
           Passionate Full Stack Developer &amp; AI enthusiast creating robust web applications

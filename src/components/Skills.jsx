@@ -5,22 +5,22 @@ const SKILLS = [
   {
     icon: 'lucide:layout-template',
     category: 'Frontend',
-    badges: ['ReactJs', 'HTML', 'CSS', 'JAVASCRIPT'],
+    badges: ['React', 'JavaScript', 'TypeScript', 'HTML/CSS', 'Vite'],
   },
   {
     icon: 'lucide:server',
-    category: 'Backend & Data',
-    badges: ['PYTHON', 'C++', 'C#', 'R', 'MongoDb', 'MYSQL'],
+    category: 'Backend & Database',
+    badges: ['Node.js', 'Python', 'SQL', 'MongoDB', 'REST APIs'],
   },
   {
-    icon: 'lucide:users',
-    category: 'Soft Skills',
-    badges: ['Flexibility', 'Team Player', 'Organized'],
+    icon: 'lucide:brain',
+    category: 'AI & Data Science',
+    badges: ['Machine Learning', 'Data Analysis', 'NLP', 'OpenAI', 'LangChain', 'A/B Testing'],
   },
   {
-    icon: 'lucide:languages',
-    category: 'Languages',
-    badges: ['English', 'Hindi'],
+    icon: 'lucide:wrench',
+    category: 'Tools & Soft Skills',
+    badges: ['Automation', 'Meta API', 'Git', 'Problem Solving', 'Team Player'],
   },
 ]
 

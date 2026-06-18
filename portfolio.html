@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Awinash Kumar | Data Analyst & AI/Full Stack Engineer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400&family=JetBrains+Mono:wght@400&family=Space+Grotesk:wght@300;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #07070f;
+            --data: #00D4FF;
+            --ai: #6C63FF;
+            --fs: #00E5A0;
+            --text: #F0F0FF;
+            --muted: #888899;
+            --nav-glow: var(--data);
+        }
+
+        * {
+            box-sizing: border-box;
+            cursor: none !important; /* Force custom cursor */
+        }
+
+        body {
+            margin: 0;
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 500;
+            margin: 0 0 1rem 0;
+        }
+
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Physics & Particles */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Cursor */
+        #cursor-dot {
+            width: 10px;
+            height: 10px;
+            background: var(--nav-glow);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 10px var(--nav-glow);
+            transition: background 0.5s, box-shadow 0.5s;
+        }
+
+        #cursor-ring {
+            width: 30px;
+            height: 30px;
+            border: 2px solid var(--nav-glow);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%, -50%);
+            opacity: 0.5;
+            transition: border-color 0.5s;
+        }
+
+        /* Nav */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 2rem;
+            backdrop-filter: blur(10px);
+            background: rgba(7, 7, 15, 0.7);
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            transition: box-shadow 0.5s;
+        }
+        nav.data-nav { box-shadow: 0 1px 15px rgba(0, 212, 255, 0.1); --nav-glow: var(--data); }
+        nav.ai-nav { box-shadow: 0 1px 15px rgba(108, 99, 255, 0.1); --nav-glow: var(--ai); }
+        nav.fs-nav { box-shadow: 0 1px 15px rgba(0, 229, 160, 0.1); --nav-glow: var(--fs); }
+
+        .logo { font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 1.2rem; color: var(--text); text-decoration: none; }
+        .nav-links a { color: var(--muted); text-decoration: none; margin-left: 2rem; transition: color 0.3s; font-size: 0.9rem; }
+        .nav-links a:hover { color: var(--text); }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+        }
+
+        /* Hero */
+        #hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding-top: 80px;
+            position: relative;
+        }
+
+        .hero-name {
+            font-size: clamp(3.5rem, 9vw, 7rem);
+            font-weight: 300;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(90deg, var(--data), var(--ai), var(--fs), var(--data));
+            background-size: 300% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient-shimmer 4s linear infinite;
+        }
+
+        @keyframes gradient-shimmer {
+            0% { background-position: 100% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .role-pills {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .role-pill {
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        
+        .pill-data { border-color: rgba(0, 212, 255, 0.3); color: var(--data); box-shadow: 0 0 10px rgba(0, 212, 255, 0.1); animation-delay: 0.2s; }
+        .pill-ai { border-color: rgba(108, 99, 255, 0.3); color: var(--ai); box-shadow: 0 0 10px rgba(108, 99, 255, 0.1); animation-delay: 0.4s; }
+        .pill-fs { border-color: rgba(0, 229, 160, 0.3); color: var(--fs); box-shadow: 0 0 10px rgba(0, 229, 160, 0.1); animation-delay: 0.6s; }
+
+        @keyframes fade-up {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .sub-headline {
+            font-size: 1.2rem;
+            color: var(--muted);
+            max-width: 600px;
+            margin-bottom: 3rem;
+            min-height: 1.8rem;
+        }
+        
+        .sub-headline::after {
+            content: '|';
+            animation: blink 1s step-end infinite;
+            color: var(--data);
+        }
+
+        @keyframes blink { 50% { opacity: 0; } }
+
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            margin-right: 1rem;
+            margin-bottom: 1rem;
+            border: 1px solid transparent;
+        }
+
+        .btn-primary { background: rgba(255,255,255,0.1); color: var(--text); border-color: rgba(255,255,255,0.2); }
+        .btn-primary:hover { background: rgba(255,255,255,0.15); box-shadow: 0 0 15px rgba(255,255,255,0.1); transform: translateY(-2px); }
+        .btn-outline { background: transparent; color: var(--muted); border-color: rgba(255,255,255,0.1); }
+        .btn-outline:hover { color: var(--text); border-color: rgba(255,255,255,0.3); transform: translateY(-2px); }
+
+        /* Sections */
+        section {
+            padding: 6rem 0;
+            position: relative;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            display: inline-block;
+        }
+
+        /* Intersection Observer Animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Levitating Cards */
+        @keyframes levitate {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-8px); }
+        }
+
+        .card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            animation: levitate 4s ease-in-out infinite alternate;
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-16px) !important; /* Override animation briefly */
+        }
+
+        .card-data:hover { box-shadow: 0 0 20px rgba(0, 212, 255, 0.2); border-color: rgba(0, 212, 255, 0.3); }
+        .card-ai:hover { box-shadow: 0 0 20px rgba(108, 99, 255, 0.2); border-color: rgba(108, 99, 255, 0.3); }
+        .card-fs:hover { box-shadow: 0 0 20px rgba(0, 229, 160, 0.2); border-color: rgba(0, 229, 160, 0.3); }
+
+        .card-meta { font-size: 0.85rem; color: var(--muted); margin-bottom: 1rem; }
+        .card-title { font-size: 1.5rem; margin-bottom: 0.5rem; }
+        
+        .live-badge {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(0, 229, 160, 0.1);
+            color: var(--fs);
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-left: 1rem;
+            vertical-align: middle;
+        }
+        .live-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--fs);
+            border-radius: 50%;
+            margin-right: 6px;
+            animation: blink-live 1.5s infinite;
+        }
+        @keyframes blink-live { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+        /* Three-World Orbit */
+        .orbit-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 700px;
+            position: relative;
+            margin: 4rem 0;
+            overflow: hidden;
+        }
+
+        .orbit-system {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 1px dashed rgba(255,255,255,0.1);
+            animation: spin 30s linear infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .orbit-system-data { top: 0; left: 50%; transform: translateX(-50%); border-color: rgba(0, 212, 255, 0.2); }
+        .orbit-system-ai { bottom: 10%; left: 10%; border-color: rgba(108, 99, 255, 0.2); }
+        .orbit-system-fs { bottom: 10%; right: 10%; border-color: rgba(0, 229, 160, 0.2); }
+
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        /* When hovering, we pause orbit */
+        .orbit-system:hover { animation-play-state: paused; border-style: solid; }
+        
+        /* For individual chips so text stays upright */
+        .orbit-chip-wrapper {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin: -20px;
+            width: 40px; height: 40px;
+            /* Distances */
+        }
+        .orbit-chip-wrapper.dist-1 { transform: rotate(0deg) translateX(120px); }
+        .orbit-chip-wrapper.dist-2 { transform: rotate(51deg) translateX(120px); }
+        .orbit-chip-wrapper.dist-3 { transform: rotate(102deg) translateX(120px); }
+        .orbit-chip-wrapper.dist-4 { transform: rotate(153deg) translateX(120px); }
+        .orbit-chip-wrapper.dist-5 { transform: rotate(204deg) translateX(120px); }
+        .orbit-chip-wrapper.dist-6 { transform: rotate(255deg) translateX(160px); }
+        .orbit-chip-wrapper.dist-7 { transform: rotate(306deg) translateX(160px); }
+        .orbit-chip-wrapper.dist-8 { transform: rotate(357deg) translateX(160px); }
+
+        /* The chip itself counter-rotates */
+        .orbit-chip {
+            animation: counter-spin 30s linear infinite;
+            white-space: nowrap;
+            padding: 0.4rem 0.8rem;
+            background: rgba(7, 7, 15, 0.9);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--text);
+            cursor: none;
+            transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+            display: inline-block;
+        }
+
+        .orbit-system:hover .orbit-chip { animation-play-state: paused; }
+        
+        .orbit-chip:hover {
+            transform: scale(1.08) !important;
+        }
+        
+        .orbit-system-data .orbit-chip:hover { border-color: var(--data); box-shadow: 0 0 15px rgba(0, 212, 255, 0.4); }
+        .orbit-system-ai .orbit-chip:hover { border-color: var(--ai); box-shadow: 0 0 15px rgba(108, 99, 255, 0.4); }
+        .orbit-system-fs .orbit-chip:hover { border-color: var(--fs); box-shadow: 0 0 15px rgba(0, 229, 160, 0.4); }
+
+        @keyframes counter-spin { 100% { transform: rotate(-360deg); } }
+
+        .orbit-center {
+            position: absolute;
+            padding: 1rem;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.05);
+            font-weight: 500;
+            font-size: 0.9rem;
+            text-align: center;
+            width: 100px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: counter-spin 30s linear infinite; /* Keeps center text upright */
+        }
+        .orbit-system-data .orbit-center { color: var(--data); box-shadow: 0 0 30px rgba(0, 212, 255, 0.1); border: 1px solid var(--data); }
+        .orbit-system-ai .orbit-center { color: var(--ai); box-shadow: 0 0 30px rgba(108, 99, 255, 0.1); border: 1px solid var(--ai); }
+        .orbit-system-fs .orbit-center { color: var(--fs); box-shadow: 0 0 30px rgba(0, 229, 160, 0.1); border: 1px solid var(--fs); }
+
+        /* Mobile overrides */
+        .skills-grid-mobile { display: none; }
+        
+        @media (max-width: 768px) {
+            .orbit-container { display: none; }
+            .skills-grid-mobile {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            .mobile-skill-group {
+                background: rgba(255,255,255,0.02);
+                padding: 1.5rem;
+                border-radius: 8px;
+                border: 1px solid rgba(255,255,255,0.05);
+            }
+            .mobile-skill-group h3 { font-size: 1.2rem; margin-bottom: 1rem; }
+            .mobile-skill-group.data-grp h3 { color: var(--data); }
+            .mobile-skill-group.ai-grp h3 { color: var(--ai); }
+            .mobile-skill-group.fs-grp h3 { color: var(--fs); }
+            
+            .chip-container { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+            .chip {
+                padding: 0.3rem 0.8rem;
+                border-radius: 50px;
+                background: rgba(255,255,255,0.05);
+                font-size: 0.8rem;
+            }
+        }
+
+        /* Experience */
+        .experience-list { border-left: 1px solid rgba(255,255,255,0.1); padding-left: 2rem; margin-left: 1rem; }
+        .experience-item { position: relative; margin-bottom: 2rem; }
+        .experience-item::before {
+            content: '';
+            position: absolute;
+            left: -2.35rem;
+            top: 5px;
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: var(--fs);
+            box-shadow: 0 0 10px var(--fs);
+        }
+        .experience-item h4 { font-size: 1.3rem; margin-bottom: 0.2rem; }
+        .experience-meta { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--muted); margin-bottom: 1rem; }
+        .experience-list ul { padding-left: 1.2rem; color: #d0d0e0; }
+        .experience-list li { margin-bottom: 0.5rem; }
+
+        /* Projects Grid */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .tag-list { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+        .tag { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; padding: 0.2rem 0.5rem; background: rgba(255,255,255,0.05); border-radius: 4px; color: var(--muted); }
+
+        /* Education */
+        .edu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+        .cert-list { list-style: none; padding: 0; }
+        .cert-list li {
+            padding: 1rem;
+            background: rgba(255,255,255,0.02);
+            border-left: 2px solid var(--ai);
+            margin-bottom: 0.5rem;
+            border-radius: 0 4px 4px 0;
+            display: flex;
+            align-items: center;
+        }
+        .cert-list li::before { content: '▸'; margin-right: 10px; color: var(--ai); }
+
+        /* Contact */
+        .contact-links { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
+        .contact-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 1rem 2rem;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 50px;
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        .contact-btn:hover { background: rgba(255,255,255,0.1); box-shadow: 0 0 20px rgba(255,255,255,0.05); transform: translateY(-3px); }
+
+        footer { text-align: center; padding: 3rem 0; color: var(--muted); font-size: 0.9rem; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 4rem; }
+
+        /* Utilities */
+        .text-muted { color: var(--muted); }
+        .mt-2 { margin-top: 2rem; }
+
+    </style>
+</head>
+<body data-current-section="hero">
+
+    <div id="cursor-dot"></div>
+    <div id="cursor-ring"></div>
+    <canvas id="particle-canvas"></canvas>
+
+    <nav id="navbar">
+        <a href="#hero" class="logo">Awinash</a>
+        <div class="nav-links">
+            <a href="#about">About</a>
+            <a href="#skills">Skills</a>
+            <a href="#experience">Experience</a>
+            <a href="#projects">Projects</a>
+        </div>
+    </nav>
+
+    <main class="container">
+        
+        <section id="hero" class="parallax-element" data-speed="0.3">
+            <div class="hero-name">Awinash Kumar</div>
+            <div class="role-pills">
+                <div class="role-pill pill-data">Data Analyst</div>
+                <div class="role-pill pill-ai">AI/ML Engineer</div>
+                <div class="role-pill pill-fs">Full Stack Dev</div>
+            </div>
+            <div class="sub-headline mono" id="typewriter"></div>
+            <div class="hero-actions reveal">
+                <a href="#projects" class="btn btn-primary">View Work ↓</a>
+                <a href="#contact" class="btn btn-outline">Hire Me →</a>
+            </div>
+        </section>
+
+        <section id="about" class="world-data reveal section-waypoint" data-nav-accent="data">
+            <h2 class="section-title">About Me</h2>
+            <div style="font-size: 1.1rem; max-width: 800px; line-height: 1.8;">
+                <p>I build the data layer, the model layer, and the product layer. With a strong foundation in statistical analysis and machine learning, combined with full-stack engineering expertise, I bridge the gap between complex algorithms and seamless user experiences.</p>
+                <p>At Embroidery by Sana, I architected production ML pipelines while simultaneously deploying robust full-stack features. I don't just train models; I deploy them into real-world applications that solve tangible problems.</p>
+                <p>Currently open to Data Analyst, ML Engineer, or Full Stack roles where I can leverage my multidisciplinary background to drive impact.</p>
+            </div>
+        </section>
+
+        <section id="skills" class="reveal section-waypoint" data-nav-accent="ai">
+            <h2 class="section-title" style="color: var(--ai); text-shadow: 0 0 20px rgba(108, 99, 255, 0.3);">Skills Universe</h2>
+            
+            <div class="orbit-container">
+                <!-- Data World -->
+                <div class="orbit-system orbit-system-data" style="left: 20%; top: 20%;">
+                    <div class="orbit-center">Data Analysis</div>
+                    <div class="orbit-chip-wrapper dist-1"><div class="orbit-chip">Python</div></div>
+                    <div class="orbit-chip-wrapper dist-2"><div class="orbit-chip">SQL</div></div>
+                    <div class="orbit-chip-wrapper dist-3"><div class="orbit-chip">Pandas</div></div>
+                    <div class="orbit-chip-wrapper dist-4"><div class="orbit-chip">NumPy</div></div>
+                    <div class="orbit-chip-wrapper dist-5"><div class="orbit-chip">Power BI</div></div>
+                    <div class="orbit-chip-wrapper dist-6"><div class="orbit-chip">EDA</div></div>
+                    <div class="orbit-chip-wrapper dist-7"><div class="orbit-chip">Stats</div></div>
+                    <div class="orbit-chip-wrapper dist-8"><div class="orbit-chip">Forecasting</div></div>
+                </div>
+
+                <!-- AI/ML World -->
+                <div class="orbit-system orbit-system-ai" style="left: 50%; bottom: 10%;">
+                    <div class="orbit-center">AI / ML</div>
+                    <div class="orbit-chip-wrapper dist-1"><div class="orbit-chip">Scikit-learn</div></div>
+                    <div class="orbit-chip-wrapper dist-2"><div class="orbit-chip">TensorFlow</div></div>
+                    <div class="orbit-chip-wrapper dist-3"><div class="orbit-chip">NLP</div></div>
+                    <div class="orbit-chip-wrapper dist-4"><div class="orbit-chip">Sentiment</div></div>
+                    <div class="orbit-chip-wrapper dist-5"><div class="orbit-chip">Regression</div></div>
+                    <div class="orbit-chip-wrapper dist-6"><div class="orbit-chip">Sequence Models</div></div>
+                    <div class="orbit-chip-wrapper dist-7"><div class="orbit-chip">Causal Inference</div></div>
+                </div>
+
+                <!-- Full Stack World -->
+                <div class="orbit-system orbit-system-fs" style="left: 80%; top: 20%;">
+                    <div class="orbit-center">Full Stack</div>
+                    <div class="orbit-chip-wrapper dist-1"><div class="orbit-chip">React</div></div>
+                    <div class="orbit-chip-wrapper dist-2"><div class="orbit-chip">Node.js</div></div>
+                    <div class="orbit-chip-wrapper dist-3"><div class="orbit-chip">Flask</div></div>
+                    <div class="orbit-chip-wrapper dist-4"><div class="orbit-chip">REST APIs</div></div>
+                    <div class="orbit-chip-wrapper dist-5"><div class="orbit-chip">MongoDB</div></div>
+                    <div class="orbit-chip-wrapper dist-6"><div class="orbit-chip">MySQL</div></div>
+                    <div class="orbit-chip-wrapper dist-7"><div class="orbit-chip">HTML/CSS</div></div>
+                    <div class="orbit-chip-wrapper dist-8"><div class="orbit-chip">JavaScript</div></div>
+                </div>
+            </div>
+
+            <!-- Mobile fallback -->
+            <div class="skills-grid-mobile">
+                <div class="mobile-skill-group data-grp">
+                    <h3>Data Analysis</h3>
+                    <div class="chip-container">
+                        <div class="chip">Python</div><div class="chip">SQL</div><div class="chip">Pandas</div><div class="chip">NumPy</div><div class="chip">Power BI</div><div class="chip">EDA</div><div class="chip">Statistical Analysis</div><div class="chip">Time-Series Forecasting</div>
+                    </div>
+                </div>
+                <div class="mobile-skill-group ai-grp">
+                    <h3>AI / ML</h3>
+                    <div class="chip-container">
+                        <div class="chip">Scikit-learn</div><div class="chip">TensorFlow</div><div class="chip">NLP</div><div class="chip">Sentiment Analysis</div><div class="chip">Regression</div><div class="chip">Sequence Models</div><div class="chip">Causal Inference</div>
+                    </div>
+                </div>
+                <div class="mobile-skill-group fs-grp">
+                    <h3>Full Stack</h3>
+                    <div class="chip-container">
+                        <div class="chip">React</div><div class="chip">Node.js</div><div class="chip">Flask</div><div class="chip">REST APIs</div><div class="chip">MongoDB</div><div class="chip">MySQL</div><div class="chip">JavaScript</div><div class="chip">HTML/CSS</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="experience" class="world-fs reveal section-waypoint" data-nav-accent="fs">
+            <h2 class="section-title">Experience</h2>
+            <div class="experience-list">
+                <div class="experience-item">
+                    <h4>AI/ML Engineer & Full Stack Engineer</h4>
+                    <div class="experience-meta">
+                        Embroidery by Sana <span class="live-badge"><div class="live-dot"></div> LIVE (embroiderybysana.live)</span><br>
+                        Nov 2025 – May 2026
+                    </div>
+                    <ul>
+                        <li>Developed an NLP sentiment analysis pipeline on live customer reviews, cutting manual analysis time by ~80%.</li>
+                        <li>Built a time-series sales forecasting model integrated with inventory management, significantly reducing overstock risks.</li>
+                        <li>Deployed an AI chatbot for customer support, providing 24/7 automated first-response coverage.</li>
+                        <li>Implemented a full-stack e-commerce platform (DB design to Flask API) with Razorpay + COD checkout experiencing zero reported payment failures.</li>
+                        <li>Created an admin dashboard for product management, order tracking, user analytics, and revenue reporting.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects" class="reveal section-waypoint" data-nav-accent="data">
+            <h2 class="section-title" style="color: var(--text);">Featured Projects</h2>
+            <div class="projects-grid">
+                
+                <div class="card card-ai parallax-element" data-speed="0.1" style="animation-delay: 0s;">
+                    <div class="card-meta mono" style="color: var(--ai)">[AI / ML]</div>
+                    <h3 class="card-title">Customer Churn Prediction</h3>
+                    <p class="text-muted">Built LR + RF + XGBoost models with cross-validation, hyperparameter tuning, evaluated on precision/recall/F1/ROC-AUC.</p>
+                    <div class="tag-list">
+                        <span class="tag">Python</span><span class="tag">Scikit-learn</span><span class="tag">TensorFlow</span><span class="tag">XGBoost</span><span class="tag">Pandas</span>
+                    </div>
+                </div>
+
+                <div class="card card-data parallax-element" data-speed="0.15" style="animation-delay: 0.4s;">
+                    <div class="card-meta mono" style="color: var(--data)">[Data Analysis]</div>
+                    <h3 class="card-title">CausalLens</h3>
+                    <p class="text-muted">Applied ML-based causal pattern detection; produced visualisation-backed insight reports on hidden data relationships.</p>
+                    <div class="tag-list">
+                        <span class="tag">Python</span><span class="tag">Causal Inference</span><span class="tag">Stats</span><span class="tag">Matplotlib</span>
+                    </div>
+                </div>
+
+                <div class="card card-fs parallax-element" data-speed="0.2" style="animation-delay: 0.8s;">
+                    <div class="card-meta mono" style="color: var(--fs)">[Full Stack + AI]</div>
+                    <h3 class="card-title">AI Lead Generation</h3>
+                    <p class="text-muted">ML-backed lead scoring system with automated data ingestion pipelines and REST API model serving.</p>
+                    <div class="tag-list">
+                        <span class="tag">Python</span><span class="tag">Flask</span><span class="tag">MongoDB</span><span class="tag">REST API</span><span class="tag">Automation</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="education" class="reveal section-waypoint" data-nav-accent="ai">
+            <h2 class="section-title" style="color: var(--ai); text-shadow: 0 0 20px rgba(108, 99, 255, 0.3);">Education & Certifications</h2>
+            
+            <div class="edu-grid">
+                <div class="card" style="animation-delay: 0s;">
+                    <h3>MCA — AI & ML</h3>
+                    <div class="mono text-muted">Chandigarh University (2024–2026)</div>
+                </div>
+                <div class="card" style="animation-delay: 0.4s;">
+                    <h3>BCA</h3>
+                    <div class="mono text-muted">Tilka Manjhi Bhagalpur University (2020–2023)</div>
+                </div>
+            </div>
+
+            <h3 class="mt-2">Certifications</h3>
+            <ul class="cert-list">
+                <li>Sequence Models — deeplearning.ai / Coursera</li>
+                <li>Machine Learning with Python: From Data to Deployment</li>
+                <li>Data Science Masters — Physics Wallah</li>
+                <li>AI for Decision Making — Coursera</li>
+            </ul>
+        </section>
+
+        <section id="contact" class="reveal section-waypoint" data-nav-accent="fs">
+            <h2 class="section-title" style="color: var(--fs); text-shadow: 0 0 20px rgba(0, 229, 160, 0.3);">Get In Touch</h2>
+            <p style="font-size: 1.1rem; max-width: 600px;">Actively seeking Data Analyst, ML Engineer, or Full Stack roles. If you're looking for someone who can build from the data layer up to the product layer, let's talk.</p>
+            
+            <div class="contact-links">
+                <a href="mailto:awinashkr31@gmail.com" class="contact-btn">
+                    <span style="font-size: 1.2rem;">✉</span> awinashkr31@gmail.com
+                </a>
+                <a href="https://github.com/Awinashkr31" target="_blank" class="contact-btn">
+                    <span style="font-size: 1.2rem;">&#128187;</span> GitHub
+                </a>
+                <a href="https://linkedin.com/in/awinash-kumar-cu" target="_blank" class="contact-btn">
+                    <span style="font-size: 1.2rem;">💼</span> LinkedIn
+                </a>
+            </div>
+        </section>
+        
+    </main>
+
+    <footer>
+        Awinash Kumar © 2026 <br> <span class="mono" style="opacity: 0.5; font-size: 0.8rem;">awinash.me</span>
+    </footer>
+
+    <script>
+        // Physics Effects & App Logic
+
+        // 1. Custom Cursor
+        const cursorDot = document.getElementById('cursor-dot');
+        const cursorRing = document.getElementById('cursor-ring');
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+        let ringX = window.innerWidth / 2;
+        let ringY = window.innerHeight / 2;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            cursorDot.style.left = mouseX + 'px';
+            cursorDot.style.top = mouseY + 'px';
+        });
+
+        // Lerp for the outer ring
+        function animateCursor() {
+            ringX += (mouseX - ringX) * 0.08;
+            ringY += (mouseY - ringY) * 0.08;
+            cursorRing.style.left = ringX + 'px';
+            cursorRing.style.top = ringY + 'px';
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        // 2. Particle Field
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        
+        const colors = ['#00D4FF', '#6C63FF', '#00E5A0'];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor(color) {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 1;
+                this.speedY = -(Math.random() * 0.5 + 0.2);
+                this.color = color;
+                this.baseX = this.x;
+                this.angle = Math.random() * Math.PI * 2;
+                this.angleSpeed = Math.random() * 0.02 + 0.01;
+                this.opacityAngle = Math.random() * Math.PI * 2;
+                this.opacitySpeed = Math.random() * 0.05 + 0.01;
+            }
+            update(scrollOffset) {
+                // Parallax drift (0.05x speed factor added implicitly below)
+                this.y += this.speedY;
+                if (this.y < -10) {
+                    this.y = canvas.height + 10;
+                    this.x = Math.random() * canvas.width;
+                    this.baseX = this.x;
+                }
+                
+                // Drift horizontally via sine wave ±20px
+                this.angle += this.angleSpeed;
+                this.x = this.baseX + Math.sin(this.angle) * 20;
+
+                // Opacity oscillation
+                this.opacityAngle += this.opacitySpeed;
+                this.opacity = 0.4 + Math.sin(this.opacityAngle) * 0.2; // 0.2 - 0.6
+            }
+            draw(scrollOffset) {
+                // To simulate parallax, we shift y drawing
+                let drawY = this.y - scrollOffset;
+                // Wrap around logic if drawn off screen due to parallax
+                if(drawY < -20) { this.y += canvas.height + 40; drawY = this.y - scrollOffset; }
+                if(drawY > canvas.height + 20) { this.y -= canvas.height + 40; drawY = this.y - scrollOffset; }
+                
+                ctx.globalAlpha = this.opacity;
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, drawY, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < 60; i++) {
+            particles.push(new Particle(colors[i % 3]));
+        }
+
+        // Parallax globals
+        let scrollY = window.scrollY;
+        window.addEventListener('scroll', () => { scrollY = window.scrollY; });
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const particleScrollOffset = scrollY * 0.05;
+            
+            particles.forEach(p => {
+                p.update();
+                p.draw(particleScrollOffset);
+            });
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        // 3. Parallax Elements
+        const parallaxElements = document.querySelectorAll('.parallax-element');
+        function applyParallax() {
+            parallaxElements.forEach(el => {
+                const speed = el.getAttribute('data-speed');
+                const yPos = -(scrollY * speed);
+                if(!el.classList.contains('card')) {
+                    el.style.transform = `translateY(${yPos}px)`;
+                } else {
+                    // For cards, combine the static transform with the levitation via pseudo wrappers if needed.
+                    // To keep it simple and performant, we just avoid overriding the animation.
+                }
+            });
+            requestAnimationFrame(applyParallax);
+        }
+        applyParallax();
+
+        // 4. Section Entrance (Intersection Observer)
+        const revealElements = document.querySelectorAll('.reveal');
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
+
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        // 5. Nav Indicator & Cursor Color Transition
+        const sections = document.querySelectorAll('.section-waypoint');
+        const nav = document.getElementById('navbar');
+        
+        const navObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    const accent = entry.target.getAttribute('data-nav-accent');
+                    nav.className = ''; // reset
+                    nav.classList.add(accent + '-nav');
+                }
+            });
+        }, { threshold: 0.3 });
+        
+        sections.forEach(s => navObserver.observe(s));
+
+        // 6. Typewriter Effect
+        const textToType = "I build the data layer, the model layer, and the product layer.";
+        const typeContainer = document.getElementById('typewriter');
+        let typeIndex = 0;
+        
+        function typeWriter() {
+            if (typeIndex < textToType.length) {
+                typeContainer.innerHTML += textToType.charAt(typeIndex);
+                typeIndex++;
+                setTimeout(typeWriter, 50);
+            }
+        }
+        setTimeout(typeWriter, 1000);
+
+        // Enhance Skill Chip hover animations
+        const skillChips = document.querySelectorAll('.orbit-chip');
+        skillChips.forEach(chip => {
+            // Adds small random float variations visually when not hovered
+            chip.style.animationDuration = (25 + Math.random() * 10) + 's';
+        });
+
+    </script>
+</body>
+</html>
